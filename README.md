@@ -1,5 +1,5 @@
 # CLiArith
-_NOTE: CLiarith is primarily my practice._
+_NOTE: CLiarith is primarily for my practice._
 
 CLiArith is a simple _trial_ implementation of the interval arithmetic in Common Lisp based on the simple implementation coded by C/C++ ([Simple Interval Arithmeric Library](http://verifiedby.me/kv/simple/index-e.html)).
 
