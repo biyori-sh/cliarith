@@ -1,5 +1,6 @@
 (in-package :cliarith)
 
+
 ;; only for SBCL
 #+sbcl
 (defparameter *default-rounding-mode*
@@ -7,6 +8,7 @@
   "a keyword of the default rounding mode")
 #-sbcl
 (error "This package is only for SBCL.")
+
 
 ;; Macro to control rounding-mode
 (defun rounding-modep (mode)
@@ -39,6 +41,7 @@
        (progn ,@body)
      (sb-int:set-floating-point-modes :ROUNDING-MODE *default-rounding-mode*)))
 
+
 ;; Type
 (deftype positive-real ()
   '(real (0) *))
@@ -54,12 +57,11 @@
 
 
 ;; Interval
-;; check large/small relation between low and high, required functions?
-;; more detailed? positive interval, interval including zero and negative interval
 (defstruct ([] (:constructor [] (low high)))
   "Structure type for the interval arithmetic."
   (low 0.0 :type real)
   (high 0.0 :type real))
+
 
 ;; Predicates
 (defmethod pointp ((i []))
@@ -93,6 +95,7 @@
 
 ;; etc
 (defun wd[] (low high)
+  "Make a well-defined interval."
   (let ((tmpi ([] low high)))
     (if (wd[]p tmpi) tmpi)))
 
@@ -110,6 +113,7 @@
 (defmethod point->[] ((point real))
   ([] point point))
 
+;; Absolute value
 (defmethod abs[]-min ((i []))
   (if (zero[]p i) 0
       (min (abs ([]-low i)) (abs ([]-high i)))))
@@ -117,13 +121,13 @@
 (defmethod abs[]-max ((i []))
   (max (abs ([]-low i)) (abs ([]-high i))))
 
-;; Absolute value
 (defmethod abs[] ((i []))
   ([] (round-negative (abs[]-min i))
       (round-positive (abs[]-max i))))
 
 (defmethod abs[] ((i real))
   (point->[] (abs i)))
+
 
 ;; Binary operators
 ;; Addittion
@@ -152,11 +156,6 @@
              ([]-high ,i-place) ([]-high ,tmp[]))
        ,i-place)))
 
-;; (let ((result ([] 0.0 0.0)))
-;;   (dotimes (i 100 result)
-;;     (setf result (+[] 0.1 result))))
-;; => #S([] :LOW 9.999982 :HIGH 10.000027)
-
 
 ;; Subtraction
 (defmethod -[] ((i1 []) (i2 []))
@@ -171,7 +170,6 @@
 (defmethod -[] ((i1 real) (i2 real))
   (+[] (point->[] i1) (point->[] (- i2))))
 
-;; (defmacro decf (i-place &optional (decrement 1))
 (defmacro decf[] (i-place &optional (decrement 1))
   `(setf ,i-place (-[] ,i-place ,decrement)))
 
@@ -230,11 +228,6 @@
 (defmacro mulf[] (i-place &optional (multiplier 2))
   `(setf ,i-place (*[] ,i-place ,multiplier)))
 
-;; (let ((result ([] 1.0 1.0)))
-;;         (dotimes (i 100 result)
-;;           (setf result (*[] ([] 0.95 0.95)  result))))
-;; => #S([] :LOW 0.0059204977 :HIGH 0.00592055)
-
 
 ;; Division
 (defmethod /[] ((i1 []) (i2 []))
@@ -256,7 +249,8 @@
 (defmacro divf[] (i-place &optional (divisor 2))
   `(setf ,i-place (/[] ,i-place ,divisor)))
 
-;; square root
+
+;; Square root(?)
 (defmethod sqrt[] ((i []))
   ([] (round-negative (sqrt ([]-low i)))
       (round-positive (sqrt ([]-high i)))))
@@ -265,18 +259,22 @@
   ([] (round-negative (sqrt i))
       (round-positive (sqrt i))))
 
-;; exponential function
+
+;; Exponential(?)
 (defmethod exp[] ((i []))
   ([] (round-negative (exp ([]-low i)))
       (round-positive (exp ([]-high i)))))
 
-;; power
-;; (defmethod expt[] ((i []))
-;;   ([] (round-negative (expt ([]-low i)))
-;;       (round-positive (expt ([]-high i)))))
+(defmethod exp[] ((i real))
+  ([] (round-negative (exp i))
+      (round-positive (exp i))))
 
 
-;; (sb-int:get-floating-point-modes)
-;; (sb-int:set-floating-point-modes :ROUNDING-MODE :POSITIVE-INFINITY)
-;; (sb-int:set-floating-point-modes :ROUNDING-MODE :NEGATIVE-INFINITY)
-;; (sb-int:set-floating-point-modes :ROUNDING-MODE :NEAREST)
+;; Power(?)
+(defmethod expt[] ((i []) (power real))
+  ([] (round-negative (expt ([]-low i) power))
+      (round-positive (expt ([]-high i) power))))
+
+(defmethod expt[] ((i real) (power real))
+  ([] (round-negative (expt i power))
+      (round-positive (expt i power))))

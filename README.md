@@ -1,7 +1,7 @@
 # CLiArith
-_NOTE: This is under construction._
+_NOTE: CLiarith is primarily my practice._
 
-CLiArith is a _trial_ and simple implementation of the interval arithmetic in Common Lisp based on the implementation coded by C/C++ ([Simple Interval Arithmeric Library](http://verifiedby.me/kv/simple/index-e.html)).
+CLiArith is a simple _trial_ implementation of the interval arithmetic in Common Lisp based on the simple implementation coded by C/C++ ([Simple Interval Arithmeric Library](http://verifiedby.me/kv/simple/index-e.html)).
 
 _CLiArith is available only in SBCL._
 
@@ -10,7 +10,25 @@ _CLiArith is available only in SBCL._
 
 
 ## Usage
-To be described
+To be described.
+
+Addition:
+```Lisp
+(let ((result (cliarith:[] 0.0 0.0)))
+  (dotimes (i 100 result)
+    (setf result (cliarith:+[] 0.1 result))))
+;; => #S(CLIARITH:[] :LOW 9.999982 :HIGH 10.000027)
+```
+
+Multiplication:
+```Lisp
+(let ((result (cliarith:[] 1.0 1.0)))
+        (dotimes (i 100 result)
+          (setf result (cliarith:*[] (cliarith:[] 0.95 0.95)  result))))
+;; => #S(CLIARITH:[] :LOW 0.0059204977 :HIGH 0.00592055)
+```
+
+Subtraction`cliarith:-[]` and division`cliarith:/[]` are implemented.
 
 
 ## Installation

@@ -1,5 +1,5 @@
 (defsystem "cliarith"
-  :description "Interval arithmetic in Common Lisp"
+  :description "Simple interval arithmetic in Common Lisp"
   :author "biyori-sh"
   :license "MIT"
   :depends-on ()
