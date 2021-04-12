@@ -1,5 +1,6 @@
 (in-package :cliarith)
 
+;; (setq *read-default-float-format* 'double-float)
 
 ;; only for SBCL
 #+sbcl
@@ -159,13 +160,13 @@
 
 ;; Subtraction
 (defmethod -[] ((i1 []) (i2 []))
-  (+[] i1 ([] (- ([]-low i2)) (- ([]-high i2)))))
-
-(defmethod -[] ((i1 real) (i2 []))
-  (+[] (point->[] i1) ([] (- ([]-low i2)) (- ([]-high i2)))))
+  (+[] i1 ([] (- ([]-high i2)) (- ([]-low i2)))))
 
 (defmethod -[] ((i1 []) (i2 real))
   (+[] i1 (point->[] (- i2))))
+
+(defmethod -[] ((i1 real) (i2 []))
+  (+[] (point->[] i1) ([] (- ([]-high i2)) (- ([]-low i2)))))
 
 (defmethod -[] ((i1 real) (i2 real))
   (+[] (point->[] i1) (point->[] (- i2))))
@@ -250,7 +251,7 @@
   `(setf ,i-place (/[] ,i-place ,divisor)))
 
 
-;; Square root(?)
+;; Square root
 (defmethod sqrt[] ((i []))
   ([] (round-negative (sqrt ([]-low i)))
       (round-positive (sqrt ([]-high i)))))
