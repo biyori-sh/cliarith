@@ -1,23 +1,30 @@
 (defpackage cliarith
   (:use :cl)
-  (:export :round-to
+  (:export :*default-rounding-mode*
+           :round-to
            :round-positive
            :round-negative
            :round-nearest
-           :[])
+           :[]
+           :get-epsilon
+           :*positive-epsilon
+           :*negative-epsilon
+           :set-float-format)
   (:export :pointp
-           :wd[]p
-           :elementp
+           :valid[]p
+           :element[]p
            :sub[]p
            :zero[]p
            :positive[]p
            :negative[]p
            :=[])
-  (:export :wd[])
+  (:export :valid[])
   (:export :diameter
            :radius
            :center
-           :point->[]
+           :->[]
+           :extend[]
+           :sign-flip[]
            :abs[]-min
            :abs[]-max
            :abs[]
@@ -28,4 +35,5 @@
            :decf[]
            :decf[]id
            :*[]
-           :/[]))
+           :/[]
+           :sqrt[]))
