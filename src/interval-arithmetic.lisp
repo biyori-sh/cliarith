@@ -207,10 +207,10 @@
              ([]-high ,i-place) ([]-high ,tmp[]))
        ,i-place)))
 
-(defun +[] (&rest rest)
+(defun +[] (&rest is)
   (let ((result[] (->[] 0)))
     (declare (type [] result[]))
-    (dolist (i rest result[])
+    (dolist (i is result[])
       (setf result[] (+[]m result[] i)))))
 
 ;; Subtraction
@@ -252,11 +252,11 @@
              ([]-high ,i-place) ([]-high ,tmp[]))
        ,i-place)))
 
-(defun -[] (i &rest rest)
-  (if rest
+(defun -[] (i &rest more-is)
+  (if more-is
       (let ((result[] (->[] i)))
         (declare (type [] result[]))
-        (dolist (ti rest result[])
+        (dolist (ti more-is result[])
           (setf result[] (-[]m result[] ti))))
       (sign-flip[] i)))
 
@@ -313,10 +313,10 @@
 (defmacro mulf[] (i-place &optional (multiplier 2))
   `(setf ,i-place (*[]m ,i-place ,multiplier)))
 
-(defun *[] (&rest rest)
+(defun *[] (&rest is)
   (let ((result[] (->[] 1)))
     (declare (type [] result[]))
-    (dolist (i rest result[])
+    (dolist (i is result[])
       (setf result[] (*[]m result[] i)))))
 
 
@@ -340,11 +340,11 @@
 (defmacro divf[] (i-place &optional (divisor 2))
   `(setf ,i-place (/[]m ,i-place ,divisor)))
 
-(defun /[] (i &rest rest)
-  (if rest
+(defun /[] (i &rest more-is)
+  (if more-is
       (let ((result[] (->[] i)))
         (declare (type [] result[]))
-        (dolist (ti rest result[])
+        (dolist (ti more-is result[])
           (setf result[] (/[]m result[] ti))))
       (/[]m 1 i)))
 

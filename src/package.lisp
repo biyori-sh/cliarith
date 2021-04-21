@@ -17,7 +17,8 @@
            :zero[]p
            :positive[]p
            :negative[]p
-           :=[])
+           :=[]
+           :intersection[]p)
   (:export :valid[])
   (:export :diameter
            :radius
@@ -25,6 +26,7 @@
            :->[]
            :extend[]
            :sign-flip[]
+           :intersection[]
            :abs[]-min
            :abs[]-max
            :abs[]
